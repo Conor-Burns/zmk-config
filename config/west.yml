@@ -10,5 +10,9 @@ manifest:
     - name: zmk
       remote: zmkfirmware
       import: app/west.yml
+    - name: zmk-keyboard-re-gret
+      url: https://github.com/rschenk/zmk-keyboard-re-gret
+      revision: main
+      path: modules/zmk-keyboard-re-gret
   self:
     path: config
