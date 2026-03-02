@@ -1,0 +1,105 @@
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/rgb.h>
+#include <dt-bindings/zmk/bt.h>
+
+#define SYM_L 1
+#define NAV_L 2
+#define NUM_L 3
+#define SYS_L 4
+
+/ {
+    behaviors {
+        hm: homerow_mods {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            tapping-term-ms = <200>;
+            flavor = "tap-preferred";
+            bindings = <&kp>, <&kp>;
+        };
+    };
+
+    conditional_layers {
+        compatible = "zmk,conditional-layers";
+        tri_layer {
+            if-layers = <SYM_L NAV_L>;
+            then-layer = <NUM_L>;
+        };
+    };
+ 
+    #define COMBO_IDLE 175
+    combos {
+        compatible = "zmk,combos";
+
+        // Activate system layer on inner thumbs
+        sys_l { key-positions = <31 32>; bindings = <&mo SYS_L>; require-prior-idle-ms = <COMBO_IDLE>; };
+
+        ret  { key-positions = <6 7 8>; bindings = <&kp RET>; };
+        esc  { key-positions = <1 2>;   bindings = <&kp ESC>;  require-prior-idle-ms = <COMBO_IDLE>;};
+        bsp  { key-positions = <26 27>; bindings = <&kp BSPC>; require-prior-idle-ms = <COMBO_IDLE>;};
+        semi { key-positions = <27 28>; bindings = <&kp SEMI>; require-prior-idle-ms = <COMBO_IDLE>;};
+
+        // Brackets and parens
+        vlbkt { key-positions = <1 11>; bindings = <&kp LBKT>; require-prior-idle-ms = <COMBO_IDLE>; };
+        vlpar { key-positions = <2 12>; bindings = <&kp LPAR>; require-prior-idle-ms = <COMBO_IDLE>; };
+        vlbrc { key-positions = <3 13>; bindings = <&kp LBRC>; require-prior-idle-ms = <COMBO_IDLE>; };
+        vrbrc { key-positions = <6 16>; bindings = <&kp RBRC>; require-prior-idle-ms = <COMBO_IDLE>; };
+        vrpar { key-positions = <7 17>; bindings = <&kp RPAR>; require-prior-idle-ms = <COMBO_IDLE>; };
+        vrbkt { key-positions = <8 18>; bindings = <&kp RBKT>; require-prior-idle-ms = <COMBO_IDLE>; };
+
+    };
+
+    keymap {
+        compatible = "zmk,keymap";
+
+        default_layer {
+            display-name = "Base";
+            bindings = <
+                &kp Q      &kp W      &kp E       &kp R          &kp T         &kp Y            &kp U          &kp I       &kp O      &kp P
+                &kp A      &kp S      &kp D       &kp F          &kp G         &kp H            &kp J          &kp K       &kp L      &kp SQT
+                &kp Z      &kp X      &kp C       &kp V          &kp B         &kp N            &kp M          &kp COMMA   &kp DOT    &kp FSLH
+                                                  &mo NAV_L      &kp SPACE     &kp RSHIFT       &mo SYM_L
+            >;
+        };
+
+        sym_layer {
+            display-name = "Symbol";
+            bindings = <
+                &kp SEMI   &kp HASH   &kp PRCNT   &kp AT          &kp PLUS      &kp TILDE       &trans         &kp STAR    &trans     &kp GRAVE
+                &kp COLON  &kp EXCL   &kp EQUAL   &kp UNDER       &kp PIPE      &kp BSLH        &sk RSHFT      &sk RCMD    &sk RALT   &sk RCTRL
+                &kp AMPS   &kp CARET  &kp DLLR    &kp MINUS       &trans        &trans          &kp FSLH       &kp LT      &kp GT     &trans
+                                                  &trans          &trans        &trans          &trans
+            >;
+        };
+
+        nav_layer {
+            display-name = "Nav";
+            bindings = <
+                &trans      &trans      &trans     &trans         &kp TAB       &trans          &trans         &trans      &trans     &trans
+                &sk LCTRL   &sk LALT    &sk LCMD   &sk LSHFT      &kp BSPC      &kp LEFT        &kp DOWN       &kp UP      &kp RIGHT  &trans
+                &kp LG(Z)   &kp LG(X)   &kp LG(C)  &kp LG(V)      &kp RET       &kp RET         &kp BSPC       &kp TAB     &trans     &trans
+                                                   &trans         &trans        &trans          &trans
+            >;
+        };
+
+        num_layer {
+            display-name = "Number";
+            bindings = <
+                &kp SEMI      &kp HASH     &kp PRCNT    &kp AT        &kp PLUS      &kp TILDE &trans        &kp STAR     &trans       &kp SQT
+                &hm LCTRL N1  &hm LALT N2  &hm LCMD N3  &hm LSHFT N4  &kp N5        &kp N6    &hm RSHFT N7  &hm RCMD N8  &hm RALT N9  &hm RCTRL N0
+                &kp AMPS      &trans       &kp DLLR     &kp MINUS     &trans        &trans    &kp BSPC      &kp COMMA    &kp PERIOD   &trans
+                                                        &trans        &trans        &trans    &trans
+            >;
+        };
+
+        system_layer {
+            display-name = "System";
+            bindings = <
+                &bootloader &studio_unlock &none   &none          &none         &rgb_ug RGB_TOG &none          &none        &none      &none
+                &kp LCTRL   &kp LALT    &kp LCMD   &kp LSHFT      &none         &kp C_PREV      &kp C_VOL_DN   &kp C_VOL_UP &kp C_NEXT &none
+                &bt BT_CLR  &none       &none      &none          &none         &none           &kp C_PP       &none        &none      &none
+                                                   &trans         &trans        &trans          &trans
+            >;
+        };
+    };
+};

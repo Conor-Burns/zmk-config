@@ -1,0 +1,5 @@
+if SHIELD_REGRET
+
+config ZMK_KEYBOARD_NAME
+    default "Re-gret"
+endif
