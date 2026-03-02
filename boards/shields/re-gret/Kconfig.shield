@@ -1,3 +1,0 @@
-config SHIELD_REGRET
-    def_bool $(shields_list_contains,re-gret)
-    select SPI
